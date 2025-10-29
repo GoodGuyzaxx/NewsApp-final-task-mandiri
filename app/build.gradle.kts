@@ -52,6 +52,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    implementation("com.faltenreich:skeletonlayout:6.0.0")
+
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.4")
 
     implementation ("com.github.bumptech.glide:glide:4.14.2")

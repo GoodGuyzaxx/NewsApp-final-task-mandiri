@@ -3,6 +3,7 @@ package my.id.zaxx.news.view.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -24,11 +25,26 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        binding.skLayoutContent.createSkeleton()
+
+        binding.swipeRefresh.setOnRefreshListener {
+            getHeadlineData()
+            getNewsList()
+        }
 
         getHeadlineData()
         getNewsList()
-        
+
+        viewModel.isLoading.observe(this){isLoading ->
+            if (isLoading){
+                binding.swipeRefresh.isRefreshing = isLoading
+                binding.cvHolder.visibility = View.GONE
+            } else {
+                binding.swipeRefresh.isRefreshing = isLoading
+                binding.cvHolder.visibility = View.VISIBLE
+
+            }
+        }
+
     }
 
     private fun getHeadlineData() {

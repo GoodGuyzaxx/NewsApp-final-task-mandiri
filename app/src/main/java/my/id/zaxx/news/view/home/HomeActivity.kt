@@ -2,14 +2,12 @@ package my.id.zaxx.news.view.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
-import com.faltenreich.skeletonlayout.createSkeleton
 import dagger.hilt.android.AndroidEntryPoint
 import my.id.zaxx.news.Adaptor.NewsListAdaptor
 import my.id.zaxx.news.data.api.response.ArticlesNewsItem
@@ -40,8 +38,6 @@ class HomeActivity : AppCompatActivity() {
                 binding.cvHolder.visibility = View.GONE
             } else {
                 binding.swipeRefresh.isRefreshing = isLoading
-                binding.cvHolder.visibility = View.VISIBLE
-
             }
         }
 
@@ -52,16 +48,22 @@ class HomeActivity : AppCompatActivity() {
         val randomIndex = (1..10).random()
 
         viewModel.headlineResponse.observe(this){data ->
-            Glide.with(this)
-                .load(data.articles?.get(randomIndex)?.urlToImage)
-                .into(binding.ivHeadlineNews)
-            binding.tvHeadlineTitle.text = data.articles?.get(randomIndex)?.title
-            binding.tvHeadlineSource.text =data.articles?.get(randomIndex)?.source?.name
-            binding.tvHeadlineTanggal.text = HelperConvertor().convertDayMonthYear(data.articles?.get(randomIndex)?.publishedAt.toString())
-            binding.cvHolder.setOnClickListener {
-                val i = Intent(Intent.ACTION_VIEW, data.articles?.get(randomIndex)?.url?.toUri())
-                startActivity(i)
+            if (data.status == "error"){
+                binding.cvHolder.visibility = View.GONE
+            } else {
+                binding.cvHolder.visibility = View.VISIBLE
+                Glide.with(this)
+                    .load(data.articles?.get(randomIndex)?.urlToImage)
+                    .into(binding.ivHeadlineNews)
+                binding.tvHeadlineTitle.text = data.articles?.get(randomIndex)?.title
+                binding.tvHeadlineSource.text =data.articles?.get(randomIndex)?.source?.name
+                binding.tvHeadlineTanggal.text = HelperConvertor().convertDayMonthYear(data.articles?.get(randomIndex)?.publishedAt.toString() ?: "10-10-2005")
+                binding.cvHolder.setOnClickListener {
+                    val i = Intent(Intent.ACTION_VIEW, data.articles?.get(randomIndex)?.url?.toUri())
+                    startActivity(i)
+                }
             }
+
         }
 
     }
@@ -84,13 +86,6 @@ class HomeActivity : AppCompatActivity() {
             setUpRecycleView(data.articles)
         }
 
-//        viewModel.isLoading.observe(this){loading ->
-//            if (loading){
-//                binding.skLayoutContent.showOriginal()
-//            } else {
-//                binding.skLayoutContent.showSkeleton()
-//            }
-//        }
     }
 
 

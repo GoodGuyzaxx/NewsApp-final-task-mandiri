@@ -1,9 +1,11 @@
 package my.id.zaxx.news.view.home
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import my.id.zaxx.news.data.api.response.HeadlineResponse
@@ -33,9 +35,12 @@ class HomeViewModel @Inject constructor(private val repo : NewsRepository): View
             try {
                 val response = repo.getHeadlineNews()
                 _headlineResponse.postValue(response)
-
             }catch (e : HttpException){
-
+                val errorJson = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(errorJson, HeadlineResponse::class.java)
+                _headlineResponse.postValue(errorBody)
+            }catch (e : Exception){
+                Log.e(TAG, "getHeadlineNews: ${e.message.toString()} ", )
             }
         }
     }
@@ -49,9 +54,17 @@ class HomeViewModel @Inject constructor(private val repo : NewsRepository): View
                 _isLoading.postValue(false)
             }catch (e: HttpException){
                 _isLoading.postValue(true)
-
+                val errorJson = e.response()?.errorBody()?.string()
+                val errorBody = Gson().fromJson(errorJson, NewsListResponse::class.java)
+                _newsListResponse.postValue(errorBody)
+            }catch (e : Exception){
+                Log.e(TAG, "getNewsList: ${e.message.toString()}")
             }
         }
+    }
+
+    companion object {
+        private val TAG = HomeViewModel::class.simpleName
     }
 
 

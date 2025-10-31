@@ -8,12 +8,14 @@ import java.time.format.DateTimeFormatter
 class HelperConvertor() {
 
     @SuppressLint("NewApi")
-    fun convertDayMonthYear(date: String): String {
-        val offsetDateTime = OffsetDateTime.parse(date)
+    fun convertDayMonthYear(date: String): String{
 
-        val outputFormat = DateTimeFormatter.ofPattern("dd MMM yyyy")
-        val outPutDateString = offsetDateTime.format(outputFormat)
+            val offsetDateTime = OffsetDateTime.parse(date)
 
-        return outPutDateString.toString()
+            val outputFormat = DateTimeFormatter.ofPattern("dd MMM yyyy")
+            val outPutDateString = offsetDateTime.format(outputFormat)
+
+            return outPutDateString.toString()
+
     }
 }

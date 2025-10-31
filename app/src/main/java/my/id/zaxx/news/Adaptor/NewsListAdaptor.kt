@@ -1,9 +1,9 @@
 package my.id.zaxx.news.Adaptor
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import my.id.zaxx.news.data.api.response.ArticlesNewsItem
 import my.id.zaxx.news.databinding.ItemNewsHolderBinding
 import my.id.zaxx.news.util.HelperConvertor
-import androidx.core.net.toUri
 
 class NewsListAdaptor : ListAdapter<ArticlesNewsItem?, NewsListAdaptor.ViewHolder>(DIFF_CALLBACK) {
 
